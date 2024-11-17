@@ -1,20 +1,66 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { View, StyleSheet, ImageBackground } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import GameStartScreen from "./screen/GameStartScreen";
+import GameScreen from "./screen/GameScreen";
+import GameOverScreen from "./screen/GameOverScreen";
 
-export default function App() {
+const App = () => {
+  const [userNumber, setUserNumber] = useState(null);
+  const [gameIsOver, setGameIsOver] = useState(true);
+  const [guessCounts, setGuessCounts] = useState(0);
+
+  const sendedNumberHandler = (sendedNumber) => {
+    setUserNumber(sendedNumber);
+    setGameIsOver(false);
+  };
+
+  function gameOverHandler(numberOfGuess){
+    setGameIsOver(true);
+    setGuessCounts(numberOfGuess)
+  }
+  
+  function startNewGameHandler(){
+    setGameIsOver(false);
+    setGuessCounts(0);
+    setUserNumber(null);
+  }
+
+  let screen = <GameStartScreen onSendNumber={sendedNumberHandler} />;
+
+  if (userNumber) {
+    screen = (
+      <GameScreen userNumber={userNumber} onGameOver={gameOverHandler} />
+    );
+  }
+
+  if (gameIsOver && userNumber) {
+    screen = <GameOverScreen roundsNumber={guessCounts} userNumber={userNumber} onStartNewGame={startNewGameHandler} />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <LinearGradient
+      colors={["rgba(0,0,0,0.8)", "transparent"]}
+      style={styles.container}
+    >
+      <ImageBackground
+        style={styles.container}
+        imageStyle={styles.backImage}
+        source={require("./assets/back.jpg")}
+      >
+        {screen}
+      </ImageBackground>
+    </LinearGradient>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  backImage: {
+    opacity: 0.6,
   },
 });
+
+export default App;

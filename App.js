@@ -15,12 +15,12 @@ const App = () => {
     setGameIsOver(false);
   };
 
-  function gameOverHandler(numberOfGuess){
+  function gameOverHandler(numberOfGuess) {
     setGameIsOver(true);
-    setGuessCounts(numberOfGuess)
+    setGuessCounts(numberOfGuess);
   }
-  
-  function startNewGameHandler(){
+
+  function startNewGameHandler() {
     setGameIsOver(false);
     setGuessCounts(0);
     setUserNumber(null);
@@ -35,7 +35,13 @@ const App = () => {
   }
 
   if (gameIsOver && userNumber) {
-    screen = <GameOverScreen roundsNumber={guessCounts} userNumber={userNumber} onStartNewGame={startNewGameHandler} />;
+    screen = (
+      <GameOverScreen
+        roundsNumber={guessCounts}
+        userNumber={userNumber}
+        onStartNewGame={startNewGameHandler}
+      />
+    );
   }
 
   return (
